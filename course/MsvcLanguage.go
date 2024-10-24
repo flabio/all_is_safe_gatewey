@@ -3,13 +3,20 @@ package course
 import (
 	"bytes"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 	"github.com/safe/utils"
 )
 
 func MsvcLanguage(c *fiber.Ctx) error {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
 	pageParam := c.Query(utils.PAGE)
 
 	id := c.Params(utils.ID)

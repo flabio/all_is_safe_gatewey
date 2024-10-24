@@ -3,22 +3,31 @@ package emergencycontact
 import (
 	"bytes"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 	"github.com/safe/utils"
 )
 
 // Handler for the  service
 func EmergencyContact(path string, c *fiber.Ctx) error {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	MSVC_EMERGENCY_CONTACT_URL := os.Getenv("MSVC_EMERGENCY_CONTACT_URL")
 	id := c.Params(utils.ID)
-	url := utils.MSVC_EMERGENCY_CONTACT_URL
+	url := MSVC_EMERGENCY_CONTACT_URL
 
 	if len(id) != 0 && url != "" {
-		url = utils.MSVC_EMERGENCY_CONTACT_URL + "/" + id
+		url = MSVC_EMERGENCY_CONTACT_URL + "/" + id
 	}
 	if path != "" {
-		url = utils.MSVC_EMERGENCY_CONTACT_URL + "/" + path + "/" + id
+		url = MSVC_EMERGENCY_CONTACT_URL + "/" + path + "/" + id
 	}
 	req, err := http.NewRequest(c.Method(), url, bytes.NewBuffer(c.Body()))
 	if err != nil {

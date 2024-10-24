@@ -4,20 +4,28 @@ import (
 	"bytes"
 	"io"
 	"io/ioutil"
+	"log"
 	"mime/multipart"
 	"net/http"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 	"github.com/safe/utils"
 )
 
 func MsvcSchool(c *fiber.Ctx) error {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	url := os.Getenv("MSVC_SCHOOL_URL")
 	pageParam := c.Query(utils.PAGE)
 	id := c.Params(utils.ID)
-	url := utils.MSVC_SCHOOL_URL
 
 	if len(id) != 0 && url != "" {
-		url = utils.MSVC_SCHOOL_URL + "/" + id
+		url = url + "/" + id
 	}
 	if len(pageParam) > 0 && url != "" {
 		url = url + "?page=" + pageParam
@@ -61,9 +69,7 @@ func MsvcSchool(c *fiber.Ctx) error {
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).SendString("Error al copiar el archivo")
 		}
-
 	}
-
 	// Cerrar el writer
 	err = writer.Close()
 	if err != nil {
@@ -94,26 +100,3 @@ func MsvcSchool(c *fiber.Ctx) error {
 
 	return c.Send(respBody)
 }
-
-/*func MsvcSchool(c *fiber.Ctx) error {
-	id := c.Params(utils.ID)
-	url := utils.MSVC_SCHOOL_URL
-
-	if len(id) != 0 && url != "" {
-		url = utils.MSVC_SCHOOL_URL + "/" + id
-	}
-
-	req, err := http.NewRequest(c.Method(), url, bytes.NewBuffer(c.Body()))
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString(utils.FAILED_CREATE)
-	}
-	req.Header.Set(utils.AUTHORIZATION, c.Get(utils.AUTHORIZATION))
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return c.Status(fiber.StatusServiceUnavailable).SendString(utils.SERVICE_NOT_AVAILALE)
-	}
-	defer resp.Body.Close()
-	respBody, err := ioutil.ReadAll(resp.Body)
-	return c.Send(respBody)
-}*/

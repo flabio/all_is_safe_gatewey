@@ -4,17 +4,25 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 	"github.com/safe/dto"
 	"github.com/safe/utils"
 )
 
 func MsvcAuth(c *fiber.Ctx) error {
-	url := utils.MSVC_AUTH_URL
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	url := os.Getenv("MSVC_AUTH_URL")
 	dataAuth := c.Body()
 	var dataMapAuth map[string]interface{}
 	json.Unmarshal(dataAuth, &dataMapAuth)

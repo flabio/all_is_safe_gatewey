@@ -7,10 +7,16 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 	"github.com/safe/utils"
 )
 
 func MsvcTopic(course string, c *fiber.Ctx) error {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
 	id := c.Params(utils.ID)
 	courseId := c.Params("course_id")
 

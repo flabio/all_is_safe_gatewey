@@ -22,6 +22,7 @@ import (
 )
 
 func main() {
+
 	app := fiber.New()
 	// Custom CORS configuration
 	// Ruta para la documentación Swagger
@@ -31,7 +32,7 @@ func main() {
 
 	// Enable CORS with specific settings
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://www.allissafetytraining.com", // Specify the origin that is allowed to make requests
+		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowMethods: "GET, POST, PUT, DELETE, OPTIONS",
 	}))
@@ -40,6 +41,7 @@ func main() {
 
 	// Grupo de rutas protegidas
 	app.Use("/api", middleware.Protected())
+
 	//router
 	auth.NewAuthRouter(app)
 	rol.NewRolRouter(app)
