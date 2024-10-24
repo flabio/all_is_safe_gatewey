@@ -20,7 +20,7 @@ func MsvcUser(namePath string, c *fiber.Ctx) error {
 	err := godotenv.Load(".env")
 
 	if err != nil {
-		log.Fatalf("Error loading .env file")
+		log.Fatalf(utils.ENV_ERROR)
 	}
 	url := os.Getenv("MSVC_USER_URL")
 	pageParam := c.Query(utils.PAGE)
@@ -53,41 +53,41 @@ func MsvcUser(namePath string, c *fiber.Ctx) error {
 		if value != "" {
 			err := writer.WriteField(field, value)
 			if err != nil {
-				return c.Status(fiber.StatusInternalServerError).SendString("Error al escribir campo de formulario")
+				return c.Status(fiber.StatusInternalServerError).SendString(utils.FIELD_FORM)
 			}
 		}
 	}
 
 	// Procesar el archivo subido
-	fileHeader, err := c.FormFile("file")
+	fileHeader, err := c.FormFile(utils.FILE)
 
 	if err == nil {
 		file, err := fileHeader.Open()
 		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).SendString("Error al abrir el archivo")
+			return c.Status(fiber.StatusInternalServerError).SendString(utils.FILE_ERROR_OPEN)
 		}
 		defer file.Close()
 
-		part, err := writer.CreateFormFile("file", fileHeader.Filename)
+		part, err := writer.CreateFormFile(utils.FILE, fileHeader.Filename)
 		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).SendString("Error al crear archivo en el multipart")
+			return c.Status(fiber.StatusInternalServerError).SendString(utils.FILE_ERROR_CREATE)
 		}
 
 		_, err = io.Copy(part, file)
 		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).SendString("Error al copiar el archivo")
+			return c.Status(fiber.StatusInternalServerError).SendString(utils.FILE_COPY_ERROR)
 		}
 	}
 	// Cerrar el writer
 	err = writer.Close()
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString("Error al cerrar el multipart writer")
+		return c.Status(fiber.StatusInternalServerError).SendString(utils.FILE_WRITER_ERROR)
 	}
 
 	// Crear la solicitud al servicio externo
 	req, err := http.NewRequest(c.Method(), url, body)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString("Error al crear la solicitud")
+		return c.Status(fiber.StatusInternalServerError).SendString(utils.FILE_ERROR_REQUEST)
 	}
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	req.Header.Set(utils.AUTHORIZATION, c.Get(utils.AUTHORIZATION))
@@ -96,31 +96,15 @@ func MsvcUser(namePath string, c *fiber.Ctx) error {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return c.Status(fiber.StatusServiceUnavailable).SendString("El servicio no está disponible")
+		return c.Status(fiber.StatusServiceUnavailable).SendString(utils.FILE_ERROR_SERVICE)
 	}
 	defer resp.Body.Close()
 
 	// Leer la respuesta
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString("Error al leer la respuesta del servicio")
+		return c.Status(fiber.StatusInternalServerError).SendString(utils.FILE_ERROR_REQUEST_SERVICE)
 	}
 
 	return c.Send(respBody)
 }
-
-// 	req, err := http.NewRequest(c.Method(), url, bytes.NewBuffer(c.Body()))
-// 	if err != nil {
-// 		return c.Status(fiber.StatusInternalServerError).SendString(utils.FAILED_CREATE)
-// 	}
-// 	req.Header.Set(utils.AUTHORIZATION, c.Get(utils.AUTHORIZATION))
-// 	client := &http.Client{}
-// 	resp, err := client.Do(req)
-// 	if err != nil {
-// 		return c.Status(fiber.StatusServiceUnavailable).SendString(utils.SERVICE_NOT_AVAILALE)
-// 	}
-// 	defer resp.Body.Close()
-// 	respBody, _ := ioutil.ReadAll(resp.Body)
-
-// 	return c.Send(respBody)
-// }
