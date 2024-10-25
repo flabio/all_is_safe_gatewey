@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -21,7 +22,7 @@ func MsvcLanguage(c *fiber.Ctx) error {
 
 	id := c.Params(utils.ID)
 
-	url := "http://localhost:3007/api/language/"
+	url := os.Getenv("MSVC_LANGUEGE_URL")
 
 	if len(id) != 0 && url != "" {
 		url = url + id

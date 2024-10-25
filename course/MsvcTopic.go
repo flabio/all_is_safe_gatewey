@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -20,7 +21,7 @@ func MsvcTopic(course string, c *fiber.Ctx) error {
 	id := c.Params(utils.ID)
 	courseId := c.Params("course_id")
 
-	url := "http://localhost:3007/api/topic/"
+	url := os.Getenv("MSVC_TOPIC_URL")
 
 	if len(id) != 0 && url != "" {
 		url += id
