@@ -7,8 +7,10 @@ type LoginDTO struct {
 
 type UserDTO struct {
 	Id        int    `json:"id"`
+	Avatar    string `json:"avatar"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`
-	Password  string `json:"password"`
+
+	Password string `json:"password"`
 }

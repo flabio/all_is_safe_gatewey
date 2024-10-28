@@ -58,6 +58,7 @@ func MsvcAuth(c *fiber.Ctx) error {
 func GenerateToken(dataMap map[string]interface{}) (string, error) {
 	userData := dto.UserDTO{
 		Id:        int(dataMap["Id"].(float64)),
+		Avatar:    dataMap["Avatar"].(string),
 		FirstName: dataMap["FirstName"].(string),
 		LastName:  dataMap["FirstSurName"].(string),
 		Email:     dataMap["Email"].(string),
@@ -68,6 +69,7 @@ func GenerateToken(dataMap map[string]interface{}) (string, error) {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["full_name"] = userData.FirstName + " " + userData.LastName
 	claims["email"] = userData.Email
+	claims["avatar"] = userData.Avatar
 	claims["id"] = userData.Id
 	claims["exp"] = time.Now().Add(time.Minute * 5).Unix()
 

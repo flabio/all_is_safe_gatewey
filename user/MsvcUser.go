@@ -46,6 +46,7 @@ func MsvcUser(namePath string, c *fiber.Ctx) error {
 		"rol_id",
 		"email",
 		"password",
+		"password_confirmation",
 		"active"}
 	for _, field := range formFields {
 		value := c.FormValue(field)
