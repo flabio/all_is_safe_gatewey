@@ -25,9 +25,9 @@ func MsvcLanguage(c *fiber.Ctx) error {
 	url := os.Getenv("MSVC_LANGUEGE_URL")
 
 	if len(id) != 0 && url != "" {
-		url = url + id
+		url = url + "/" + id
 	} else {
-		url = url + "?page=" + pageParam
+		url = url + "/?page=" + pageParam
 	}
 
 	req, err := http.NewRequest(c.Method(), url, bytes.NewBuffer(c.Body()))
