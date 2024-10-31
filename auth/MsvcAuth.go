@@ -60,7 +60,7 @@ func GenerateToken(dataMap map[string]interface{}) (string, error) {
 		Id:        int(dataMap["Id"].(float64)),
 		Avatar:    dataMap["Avatar"].(string),
 		FirstName: dataMap["FirstName"].(string),
-		LastName:  dataMap["FirstSurName"].(string),
+		LastName:  dataMap["LastName"].(string),
 		Email:     dataMap["Email"].(string),
 	}
 

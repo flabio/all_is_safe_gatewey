@@ -32,7 +32,7 @@ func main() {
 
 	// Enable CORS with specific settings
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://www.allissafetytraining.com",
+		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowMethods: "GET, POST, PUT, DELETE, OPTIONS",
 	}))

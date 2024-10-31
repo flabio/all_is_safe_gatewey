@@ -13,28 +13,34 @@ func NewUserRouter(app *fiber.App) {
 
 	app.Get("/user/", func(c *fiber.Ctx) error {
 
-		return MsvcUser("",c)
+		return MsvcUser("", c)
 	})
 	app.Get("/user/students/", func(c *fiber.Ctx) error {
 
-		return MsvcUser("students",c)
+		return MsvcUser("students", c)
 	})
 	app.Get("/user/instructor/", func(c *fiber.Ctx) error {
 
-		return MsvcUser("instructor",c)
+		return MsvcUser("instructor", c)
 	})
 	app.Get("/user/:id", func(c *fiber.Ctx) error {
-		return MsvcUser("",c)
+		return MsvcUser("", c)
 	})
 	app.Post("/user", func(c *fiber.Ctx) error {
-		return MsvcUser("",c)
+		return MsvcUser("", c)
 	})
 
 	app.Put("/user/:id", func(c *fiber.Ctx) error {
-		return MsvcUser("",c)
+		return MsvcUser("", c)
+	})
+	app.Put("/user/password/:id", func(c *fiber.Ctx) error {
+		return MsvcUser("password", c)
+	})
+	app.Put("/user/avatar/:id", func(c *fiber.Ctx) error {
+		return MsvcUserAvatar("avatar", c)
 	})
 	app.Delete("/user/:id", func(c *fiber.Ctx) error {
-		return MsvcUser("",c)
+		return MsvcUser("", c)
 	})
 
 }
