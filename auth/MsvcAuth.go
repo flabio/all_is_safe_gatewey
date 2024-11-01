@@ -39,19 +39,23 @@ func MsvcAuth(c *fiber.Ctx) error {
 	}
 	defer resp.Body.Close()
 	respBody, err := ioutil.ReadAll(resp.Body)
+
 	if err != nil {
-		return c.Send([]byte(err.Error()))
+
+		return c.Status(fiber.StatusBadRequest).Send([]byte(respBody))
 	}
+
 	var dataMap map[string]interface{}
 	err = json.Unmarshal(respBody, &dataMap)
 	if err != nil {
-		return c.Send([]byte(respBody))
+
+		return c.Status(fiber.StatusBadRequest).Send([]byte(respBody))
 	}
 	t, err := GenerateToken(dataMap)
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
-
+	log.Println(string(t))
 	return c.Send([]byte(t))
 }
 
