@@ -34,10 +34,10 @@ func NewUserRouter(app *fiber.App) {
 		return MsvcUser("", c)
 	})
 	app.Put("/user/password/:id", func(c *fiber.Ctx) error {
-		return MsvcUser("password", c)
+		return MsvcUserUpdatePassword(c)
 	})
 	app.Put("/user/avatar/:id", func(c *fiber.Ctx) error {
-		return MsvcUserAvatar("avatar", c)
+		return MsvcUserAvatar(c)
 	})
 	app.Delete("/user/:id", func(c *fiber.Ctx) error {
 		return MsvcUser("", c)

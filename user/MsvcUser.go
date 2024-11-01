@@ -97,18 +97,14 @@ func MsvcUser(namePath string, c *fiber.Ctx) error {
 	return c.Send(respBody)
 }
 
-func MsvcUserAvatar(namePath string, c *fiber.Ctx) error {
+func MsvcUserAvatar(c *fiber.Ctx) error {
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf(utils.ENV_ERROR)
 	}
 	url := os.Getenv("MSVC_USER_URL")
 	id := c.Params(utils.ID)
-
-	if len(id) != 0 && namePath != "" {
-		url = url + "/" + namePath + "/" + id
-		log.Println(url)
-	}
+	url = url + "/avatar/" + id
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 
@@ -148,5 +144,29 @@ func MsvcUserAvatar(namePath string, c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(utils.FILE_ERROR_REQUEST_SERVICE)
 	}
+	return c.Send(respBody)
+}
+
+func MsvcUserUpdatePassword(c *fiber.Ctx) error {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf(utils.ENV_ERROR)
+	}
+	url := os.Getenv("MSVC_USER_URL")
+	id := c.Params(utils.ID)
+
+	url = url + "/password/" + id
+	req, err := http.NewRequest(c.Method(), url, bytes.NewBuffer(c.Body()))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(utils.FAILED_CREATE)
+	}
+	req.Header.Set(utils.AUTHORIZATION, c.Get(utils.AUTHORIZATION))
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return c.Status(fiber.StatusServiceUnavailable).SendString(utils.SERVICE_NOT_AVAILALE)
+	}
+	defer resp.Body.Close()
+	respBody, err := ioutil.ReadAll(resp.Body)
 	return c.Send(respBody)
 }
