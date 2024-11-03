@@ -33,6 +33,6 @@ func NewCourseRouter(app *fiber.App) {
 		return MsvcCourse("school", c)
 	})
 	app.Delete("/course/school/:id", func(c *fiber.Ctx) error {
-		return MsvcCourse("school", c)
+		return MsvcCourseSchool(c)
 	})
 }
