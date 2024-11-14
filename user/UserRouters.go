@@ -42,5 +42,4 @@ func NewUserRouter(app *fiber.App) {
 	app.Delete("/user/:id", func(c *fiber.Ctx) error {
 		return MsvcUser("", c)
 	})
-
 }

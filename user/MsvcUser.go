@@ -50,7 +50,6 @@ func MsvcUser(namePath string, c *fiber.Ctx) error {
 	}
 	for _, field := range formFields {
 		value := c.FormValue(field)
-		log.Println(value)
 		if value != "" {
 			err := writer.WriteField(field, value)
 			if err != nil {

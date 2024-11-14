@@ -10,6 +10,7 @@ import (
 	"github.com/safe/emergencycontact"
 	"github.com/safe/handlers"
 	"github.com/safe/middleware"
+	"github.com/safe/module"
 	"github.com/safe/parentesco"
 	"github.com/safe/rol"
 	"github.com/safe/school"
@@ -45,6 +46,7 @@ func main() {
 	//router
 	auth.NewAuthRouter(app)
 	rol.NewRolRouter(app)
+	module.NewUserRouter(app)
 	parentesco.NewParentescoRouter(app)
 	emergencycontact.NewEmergencyContactRouter(app)
 	states.NewStatesRouter(app)
