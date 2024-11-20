@@ -12,23 +12,23 @@ import (
 	"github.com/safe/utils"
 )
 
-func MsvcTopic(course string, c *fiber.Ctx) error {
+func EnvLoad() {
 	err := godotenv.Load(".env")
 
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
+}
+
+// Handler for the  service
+func MsvcTypeCourse(c *fiber.Ctx) error {
+	EnvLoad()
+	url := os.Getenv("MSVC_TYPE_COURSE_URL")
 	id := c.Params(utils.ID)
-	courseId := c.Params("course_id")
-
-	url := os.Getenv("MSVC_TOPIC_URL")
-
 	if len(id) != 0 && url != "" {
 		url = url + "/" + id
 	}
-	if course != "" {
-		url += "/course/" + courseId
-	}
+
 	req, err := http.NewRequest(c.Method(), url, bytes.NewBuffer(c.Body()))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(utils.FAILED_CREATE)
@@ -41,8 +41,5 @@ func MsvcTopic(course string, c *fiber.Ctx) error {
 	}
 	defer resp.Body.Close()
 	respBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString("failed to read response body")
-	}
 	return c.Send(respBody)
 }
