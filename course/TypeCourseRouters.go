@@ -2,12 +2,11 @@ package course
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/safe/middleware"
 )
 
 func NewTypeCourseRouter(app *fiber.App) {
-	app.Use(middleware.LoggingMiddleware)
-	app.Use(middleware.AuthMiddleware)
+	// app.Use(middleware.LoggingMiddleware)
+	// app.Use(middleware.AuthMiddleware)
 
 	//app.Use("/course", middleware.Protected())
 	app.Get("/type_course", func(c *fiber.Ctx) error {

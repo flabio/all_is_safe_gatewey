@@ -53,6 +53,7 @@ func main() {
 	user.NewUserRouter(app)
 	school.NewSchoolRouter(app)
 	course.NewCourseRouter(app)
+	course.NewTypeCourseRouter(app)
 	course.NewTopicRouter(app)
 	course.NewLanguageRouter(app)
 	city.NewCityRouter(app)
