@@ -29,6 +29,9 @@ func NewCourseRouter(app *fiber.App) {
 	app.Get("/course/school", func(c *fiber.Ctx) error {
 		return MsvcCourse("school", c)
 	})
+	app.Get("/course/school/:id", func(c *fiber.Ctx) error {
+		return MsvcCourseSchool(c)
+	})
 	app.Post("/course/school", func(c *fiber.Ctx) error {
 		return MsvcCourse("school", c)
 	})
